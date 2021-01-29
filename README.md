@@ -7,6 +7,12 @@ A Google Chrome extension to detect and block XSS whole script injection.\
 The requests supported are of two types: GET & POST form data.\
 Only javascript based XSS is supported.
 
+### Sample inputs:
+```
+<script> alert(); </script>
+<  scRipT type="text/javascript">;</scriPt  >
+```
+
 ### Team Members  -
 
 Tathagat Verma - 180050111\
