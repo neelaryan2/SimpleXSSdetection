@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
 
-	"name": "Form Data",
-	"description": "Looks at some form data.",
-	"version": "0.9",
+	"name": "XSSdetector",
+	"description": "Blocks webpages involving XSS injection through GET or POST requests.",
+	"version": "1.0",
 
 	"background": {
 		"scripts": ["background.js"]

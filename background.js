@@ -7,57 +7,46 @@ chrome.runtime.onInstalled.addListener(function() {
   	new chrome.declarativeContent.ShowPageAction();
 });
 
-function parse_query_string(query) {
-  	var vars = query.split("&");
-  	var query_string = {};
-  	for (var i = 0; i < vars.length; i++) {
-	    var pair = vars[i].split("=");
-	    var key = decodeURIComponent(pair[0]);
-	    var value = decodeURIComponent(pair[1]);
-	    if (typeof query_string[key] === "undefined")
-      		query_string[key] = [];
-  		query_string[key].push(decodeURIComponent(value));
-  	}
-  	return query_string;
-}
-
 function is_malicious(payload) {
-	return payload.includes('foo');
+	let malicious = false;
+	var patterns = [ 
+		/<[\s\+]*script[\s\+]*(.*=.*)*[\s\+]*>[^]*<[\s\+]*\/[\s\+]*script[\s\+]*>/im,
+	];
+	patterns.forEach(pattern => {
+		if (pattern.test(payload))
+			malicious = true;
+	});
+	console.log(payload, "->", (malicious ? "cancelled." : "accepted."));
+	return malicious;
 };
 
 function check_url(details) {
 	let malicious_site = false;
-		if (details.method == "POST") {
-			let formData = details.requestBody.formData;
+	if (details.method == "POST") {
+		let formData = details.requestBody.formData;
 
-			if(formData) {
-				Object.keys(formData).forEach(key => {
-					formData[key].forEach(value => {
-						if (is_malicious(value)) {
-							console.log(value, "-> cancelled.");
-							malicious_site = true;
-						}
-					});
-				});
-			}
-		}
-		else if (details.method == "GET") {
-			let url = decodeURI(details.url)
-			let idx = url.indexOf('?')
-
-			if (idx != -1) {
-				var params = url.substring( idx + 1 ).split('&');
-			  	for (var i = 0; i < params.length; i++) {
-				    var pair = params[i].split("=");
-				    var key = decodeURIComponent(pair[0]);
-				    var value = decodeURIComponent(pair[1]);
-				    if (is_malicious(value)) {
-						console.log(value, "-> cancelled.");
+		if(formData) {
+			Object.keys(formData).forEach(key => {
+				formData[key].forEach(value => {
+					if (is_malicious(value))
 						malicious_site = true;
-					}
-			  	}
-			}
+				});
+			});
 		}
+	} else if (details.method == "GET") {
+		let url = decodeURI(details.url)
+		let idx = url.indexOf('?')
+
+		if (idx != -1) {
+			var params = url.substring( idx + 1 ).split('&');
+		  	for (var i = 0; i < params.length; i++) {
+			    var pair = params[i].split("=");
+			    var value = decodeURIComponent(pair[1]);
+			    if (is_malicious(value))
+					malicious_site = true;
+		  	}
+		}
+	}
 	if (malicious_site)
 		return {cancel : true};
 };
