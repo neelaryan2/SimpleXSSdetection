@@ -2,7 +2,8 @@
 	"manifest_version": 2,
 
 	"name": "XSSdetector",
-	"description": "Blocks webpages involving XSS injection through GET or POST requests.",
+	"description": "Blocks webpages involving XSS injection through GET or POST requests, Blocks Google ads.",
+	"author": "Neel Aryan Gupta, Pulkit Agrawal, Tathagat Verma",
 	"version": "1.0",
 
 	"background": {

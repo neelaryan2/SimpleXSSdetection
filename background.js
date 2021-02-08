@@ -51,6 +51,10 @@ function check_url(details) {
 		return {cancel : true};
 };
 
+function blockAd(details){
+	return {cancel: true};
+}
+
 function toggleListener(enable) {
     if (enable) {
         chrome.webRequest.onBeforeRequest.addListener(
@@ -58,8 +62,14 @@ function toggleListener(enable) {
 			{urls: ["<all_urls>"]},
 			["blocking", "requestBody"]
 		);
+		chrome.webRequest.onBeforeRequest.addListener(
+			blockAd,
+			{urls: ["*://googleads.g.doubleclick.net/*"]},
+			["blocking"]
+		);
     } else {
-        chrome.webRequest.onBeforeRequest.removeListener(check_url);
+		chrome.webRequest.onBeforeRequest.removeListener(check_url);
+		chrome.webRequest.onBeforeRequest.removeListener(blockAd);
     }
 }
 

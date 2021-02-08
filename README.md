@@ -26,6 +26,6 @@ On examining the website, we found that all advertisements are sent to URLs havi
 
 ### Team Members  -
 
-Tathagat Verma - 180050111\
-Pulkit Agrawal - 180050081\
 [Neel Aryan Gupta](https://www.cse.iitb.ac.in/~neelaryan) - 180050067  
+Pulkit Agrawal - 180050081\
+Tathagat Verma - 180050111\
